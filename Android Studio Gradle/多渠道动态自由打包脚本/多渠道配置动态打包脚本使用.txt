@@ -1,0 +1,7 @@
+多渠道配置动态打包脚本使用
+
+1、导入buildShell.sh脚本和flavor.gradle多渠道动态配置脚本
+2、在模块代码中的build.gradle中导入apply from:'flavor.gradle的相对路径'
+3、执行buildShell.sh脚本，./buildShell.sh '需要合并打包的渠道名,多个渠道用“,”分割' '需要编译的哪个model' '编译的环境，debug/release'
+4、注意：第一次执行buildShell.sh脚本可能会报权限问题，执行chmod +x ./buildShell.sh；渠道名必传；传model，编译model项目，否则编译整个项目；编译环境同理，不传编译debug、release
+5、eg：./buildShell.sh 'aa,bb' 'app' 'debug'   ----对应生成的打包命令---->    ./gradlew app:assembleAaBaDebug

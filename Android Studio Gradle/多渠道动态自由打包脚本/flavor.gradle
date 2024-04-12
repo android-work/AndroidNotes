@@ -1,0 +1,60 @@
+android {
+    // flavors存放需要被组合打包的渠道
+    ArrayList<String> flavors = []
+    // 命令中是否传入flavors参数
+    if (project.hasProperty('flavors')) {
+        String flavorsStr = project.property('flavors')
+        for (final def flavor in flavorsStr.split(',')) {
+            flavors.add(flavor)
+            System.out.println("---->传入的渠道名:$flavor")
+        }
+    }
+
+    // 没有设置渠道，不做多渠道打包配置
+    if(!flavors.isEmpty()) {
+        flavorDimensions += flavors
+        System.out.println(flavorDimensions)
+        productFlavors {
+
+            Aa {
+
+            }
+
+            bb {
+
+            }
+
+            Cc {
+
+            }
+        }
+
+        // 合并打包变体名
+//        def buildName = "assemble"
+
+        productFlavors.configureEach {
+            System.out.println("------>设置前：dimension:" + it.dimension + ",flavorName:" + it.name)
+            flavors.forEach { flavor ->
+                // 设置渠道名，将需要对应合并打包渠道进行设置
+                if (it.name == flavor) {
+                    it.dimension = flavor
+                    // 合并变体
+//                    if (flavor.length() > 1) {
+//                        buildName += Character.toUpperCase(flavor.charAt(0)) + flavor.substring(1)
+//                    } else {
+//                        buildName += "${flavor.toUpperCase()}"
+//                    }
+
+                } else {
+                    // 当渠道不存在dimension时，默认设置flavor
+                    if (it.dimension == null || it.dimension.empty) {
+                        it.dimension = flavor
+                    }
+                }
+            }
+            System.out.println("------>设置后：dimension:" + it.dimension + ",flavorName:" + it.name)
+        }
+
+    }
+
+}
